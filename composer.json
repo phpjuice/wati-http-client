@@ -1,7 +1,6 @@
 {
     "name": "phpjuice/wati-http-client",
     "description": "PHP Http Client for Wati.io WhatsApp API",
-    "version": "1.0.0",
     "keywords": [
         "phpjuice",
         "wati",

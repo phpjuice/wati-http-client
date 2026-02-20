@@ -83,3 +83,50 @@ it('can execute a request', function (): void {
 
     expect($response->getStatusCode())->toBe(200);
 });
+
+it('accepts custom timeout option', function (): void {
+    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $client = new WatiClient($env, ['timeout' => 60]);
+
+    expect($client->getEnvironment())->toBe($env);
+});
+
+it('accepts custom connect_timeout option', function (): void {
+    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $client = new WatiClient($env, ['connect_timeout' => 20]);
+
+    expect($client->getEnvironment())->toBe($env);
+});
+
+it('accepts verify ssl option', function (): void {
+    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $client = new WatiClient($env, ['verify' => false]);
+
+    expect($client->getEnvironment())->toBe($env);
+});
+
+it('accepts proxy option', function (): void {
+    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $client = new WatiClient($env, ['proxy' => 'tcp://localhost:8080']);
+
+    expect($client->getEnvironment())->toBe($env);
+});
+
+it('accepts debug option', function (): void {
+    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $client = new WatiClient($env, ['debug' => true]);
+
+    expect($client->getEnvironment())->toBe($env);
+});
+
+it('accepts multiple options', function (): void {
+    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $client = new WatiClient($env, [
+        'timeout' => 60,
+        'connect_timeout' => 20,
+        'verify' => true,
+        'debug' => false,
+    ]);
+
+    expect($client->getEnvironment())->toBe($env);
+});

@@ -1,0 +1,75 @@
+{
+    "name": "phpjuice/wati-http-client",
+    "description": "PHP Http Client for Wati.io WhatsApp API",
+    "version": "1.0.0",
+    "keywords": [
+        "phpjuice",
+        "wati",
+        "whatsapp",
+        "http",
+        "client"
+    ],
+    "homepage": "https://github.com/phpjuice/wati-http-client",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "PHPJuice",
+            "email": "phpjuice@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.3 || ^8.4",
+        "ext-json": "*",
+        "guzzlehttp/psr7": "^2.0",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.27",
+        "pestphp/pest": "^4.4",
+        "pestphp/pest-plugin-type-coverage": "^4.0",
+        "phpstan/phpstan": "^2.1",
+        "rector/rector": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wati\\Http\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "pint": "vendor/bin/pint",
+        "pint:dry": "vendor/bin/pint --test",
+        "rect": "vendor/bin/rector",
+        "rect:dry": "vendor/bin/rector --dry-run",
+        "types": "vendor/bin/phpstan analyse src tests",
+        "types:coverage": "vendor/bin/pest --parallel --type-coverage --min=90",
+        "test": "XDEBUG_MODE=off vendor/bin/pest --parallel --stop-on-failure",
+        "test:parallel": "XDEBUG_MODE=off vendor/bin/pest --parallel",
+        "test:coverage": "vendor/bin/pest --parallel --coverage --min=80",
+        "test:full": [
+            "@pint:dry",
+            "@rect:dry",
+            "@types",
+            "@types:coverage",
+            "@test:coverage"
+        ],
+        "fmt": [
+            "@rect",
+            "@pint"
+        ]
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}

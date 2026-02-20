@@ -1,0 +1,137 @@
+# Wati HTTP Client
+
+![Tests](https://github.com/phpjuice/wati-http-client/workflows/Tests/badge.svg?branch=main)
+[![Latest Stable Version](http://poser.pugx.org/phpjuice/wati-http-client/v)](https://packagist.org/packages/phpjuice/wati-http-client)
+[![Total Downloads](http://poser.pugx.org/phpjuice/wati-http-client/downloads)](https://packagist.org/packages/phpjuice/wati-http-client)
+[![License](http://poser.pugx.org/phpjuice/wati-http-client/license)](https://packagist.org/packages/phpjuice/wati-http-client)
+
+A PHP HTTP Client for the [Wati.io](https://wati.io) WhatsApp API. Provides a simple, fluent API to interact with Wati's REST API.
+
+## Installation
+
+This package requires PHP 8.3 or higher.
+
+```bash
+composer require "phpjuice/wati-http-client"
+```
+
+## Setup
+
+### Get Your Credentials
+
+1. Log in to your [Wati Account](https://app.wati.io)
+2. Navigate to **API Docs** in the top menu
+3. Copy your **API Endpoint URL** and **Bearer Token**
+
+### Create a Client
+
+```php
+<?php
+
+use Wati\Http\WatiClient;
+use Wati\Http\WatiEnvironment;
+
+// Your API endpoint and bearer token from the Wati dashboard
+$endpoint = "https://your-instance.wati.io";
+$bearerToken = "your-bearer-token";
+
+// Create environment
+$environment = new WatiEnvironment($endpoint, $bearerToken);
+
+// Create client
+$client = new WatiClient($environment);
+```
+
+## Usage
+
+### Making Requests
+
+Extend `WatiRequest` to create your API requests:
+
+```php
+<?php
+
+use Wati\Http\WatiRequest;
+use GuzzleHttp\Psr7\Utils;
+
+class GetContactsRequest extends WatiRequest
+{
+    public function __construct(int $page = 1, int $pageSize = 50)
+    {
+        parent::__construct(
+            'GET',
+            "/api/v1/getContacts?page={$page}&pageSize={$pageSize}",
+            ['Accept' => 'application/json']
+        );
+    }
+}
+
+class SendTemplateMessageRequest extends WatiRequest
+{
+    public function __construct(string $phoneNumber, string $templateName, array $parameters = [])
+    {
+        $body = json_encode([
+            'template_name' => $templateName,
+            'broadcast_name' => $templateName,
+            'parameters' => $parameters,
+        ]);
+
+        parent::__construct(
+            'POST',
+            "/api/v1/sendTemplateMessage?whatsappNumber={$phoneNumber}",
+            [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+            Utils::streamFor($body)
+        );
+    }
+}
+```
+
+### Execute Requests
+
+```php
+<?php
+
+use GuzzleHttp\Utils;
+
+// Get contacts
+$response = $client->send(new GetContactsRequest());
+$data = Utils::jsonDecode($response->getBody()->getContents(), true);
+
+// Send a template message
+$response = $client->send(new SendTemplateMessageRequest(
+    '1234567890',
+    'hello_world',
+    ['name' => 'John']
+));
+```
+
+## API Reference
+
+For full API documentation, visit [Wati API Docs](https://docs.wati.io/reference/introduction).
+
+### Available Endpoints
+
+- **Messaging**: Send templates, session messages, interactive messages
+- **Contacts**: Get, add, update contacts
+- **Conversations**: Messages, status updates
+- **Templates**: Get and send message templates
+- **Campaigns**: Manage broadcasts
+
+## Changelog
+
+Please see the [CHANGELOG](changelog.md) for more information on what has changed recently.
+
+## Contributing
+
+Please see [CONTRIBUTING](./.github/CONTRIBUTING.md) for details.
+
+## Security
+
+If you discover any security-related issues, please email the author instead of using the issue tracker.
+
+## License
+
+Please see the [License](./LICENSE) file.

@@ -1,6 +1,6 @@
 # Wati HTTP Client
 
-[![CI](https://github.com/phpjuice/wati-http-client/workflows/CI/badge.svg?branch=main)](https://github.com/phpjuice/wati-http-client/actions)
+[![CI](https://github.com/phpjuice/wati-http-client/actions/workflows/php.yml/badge.svg)](https://github.com/phpjuice/wati-http-client/actions/workflows/php.yml)
 [![PHP Version](https://img.shields.io/badge/PHP-8.3%20%7C%208.4-777BB4?logo=php&logoColor=white)](https://php.net)
 [![Latest Stable Version](http://poser.pugx.org/phpjuice/wati-http-client/v)](https://packagist.org/packages/phpjuice/wati-http-client)
 [![Total Downloads](http://poser.pugx.org/phpjuice/wati-http-client/downloads)](https://packagist.org/packages/phpjuice/wati-http-client)

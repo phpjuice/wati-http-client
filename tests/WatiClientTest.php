@@ -68,8 +68,9 @@ it('injects sdk headers', function (): void {
     $lastRequest = $mockHandler->getLastRequest();
     assert($lastRequest !== null);
     expect($lastRequest->getHeaderLine('Authorization'))->toBe('Bearer test-token')
-        ->and($lastRequest->getHeaderLine('SDK_Name'))->toBe('Wati PHP SDK')
-        ->and($lastRequest->getHeaderLine('SDK_Version'))->toBe('1.0.0')
+        ->and($lastRequest->getHeaderLine('Wati-SDK-Name'))->toBe('wati-http-client')
+        ->and($lastRequest->getHeaderLine('Wati-SDK-Version'))->toBe('1.0.0')
+        ->and($lastRequest->getHeaderLine('Wati-SDK-Language'))->toBe('PHP')
         ->and($lastRequest->getHeaderLine('User-Agent'))->toBe('WatiHttp-PHP HTTP/1.1');
 });
 

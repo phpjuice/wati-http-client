@@ -124,8 +124,9 @@ class WatiClient
     protected function injectSdkHeaders(RequestInterface $request): RequestInterface
     {
         return $request
-            ->withHeader('SDK_Name', 'Wati PHP SDK')
-            ->withHeader('SDK_Version', '1.0.0');
+            ->withHeader('Wati-SDK-Name', 'wati-http-client')
+            ->withHeader('Wati-SDK-Version', '1.0.0')
+            ->withHeader('Wati-SDK-Language', 'PHP');
     }
 
     public function setClient(Client $client): self

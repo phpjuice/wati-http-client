@@ -33,8 +33,9 @@ composer require "phpjuice/wati-http-client"
 use Wati\Http\WatiClient;
 use Wati\Http\WatiEnvironment;
 
-// Your API endpoint and bearer token from the Wati dashboard
-$endpoint = "https://your-instance.wati.io";
+// Get this URL from your Wati Dashboard (API Docs section)
+// It includes your tenant ID: https://live-mt-server.wati.io/{tenantId}
+$endpoint = "https://live-mt-server.wati.io/372813";
 $bearerToken = "your-bearer-token";
 
 // Create environment

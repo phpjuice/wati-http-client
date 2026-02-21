@@ -4,14 +4,19 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
+use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Wati\Http\Exceptions\AuthenticationException;
 use Wati\Http\Exceptions\RateLimitException;
 use Wati\Http\Exceptions\ValidationException;
 use Wati\Http\Exceptions\WatiApiException;
+use Wati\Http\Exceptions\WatiException;
 use Wati\Http\WatiClient;
 use Wati\Http\WatiEnvironment;
 use Wati\Http\WatiRequest;
@@ -128,5 +133,46 @@ it('includes retry-after in RateLimitException', function (): void {
         $client->send($request);
     } catch (RateLimitException $e) {
         expect($e->getRetryAfter())->toBe(120);
+    }
+});
+
+it('throws WatiException on connection failure', function (): void {
+    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $client = new WatiClient($env);
+
+    $connectException = new ConnectException(
+        'Connection refused',
+        new Request('GET', '/api/v1/contacts')
+    );
+
+    $mockHandler = new MockHandler([$connectException]);
+    $client->setClient(new Client(['handler' => HandlerStack::create($mockHandler)]));
+
+    $request = new class('GET', '/api/v1/contacts') extends WatiRequest {};
+
+    try {
+        $client->send($request);
+    } catch (WatiException $e) {
+        expect($e->getMessage())->toContain('Failed to connect to Wati API')
+            ->and($e->getPrevious())->toBeInstanceOf(ConnectException::class);
+    }
+});
+
+it('throws WatiException on generic guzzle error', function (): void {
+    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $client = new WatiClient($env);
+
+    $guzzleException = new class('Too many redirects') extends Exception implements GuzzleException {};
+
+    $mockHandler = new MockHandler([$guzzleException]);
+    $client->setClient(new Client(['handler' => HandlerStack::create($mockHandler)]));
+
+    $request = new class('GET', '/api/v1/contacts') extends WatiRequest {};
+
+    try {
+        $client->send($request);
+    } catch (WatiException $e) {
+        expect($e->getMessage())->toContain('HTTP request failed')
+            ->and($e->getPrevious())->toBeInstanceOf(GuzzleException::class);
     }
 });

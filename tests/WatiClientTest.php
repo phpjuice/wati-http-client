@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Http;
 
+use Closure;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
 use Wati\Http\WatiClient;
 use Wati\Http\WatiEnvironment;
 use Wati\Http\WatiRequest;
@@ -66,8 +68,8 @@ it('injects sdk headers', function (): void {
     $lastRequest = $mockHandler->getLastRequest();
     assert($lastRequest !== null);
     expect($lastRequest->getHeaderLine('Authorization'))->toBe('Bearer test-token')
-        ->and($lastRequest->getHeaderLine('sdk_name'))->toBe('Wati PHP SDK')
-        ->and($lastRequest->getHeaderLine('sdk_version'))->toBe('1.0.0')
+        ->and($lastRequest->getHeaderLine('SDK_Name'))->toBe('Wati PHP SDK')
+        ->and($lastRequest->getHeaderLine('SDK_Version'))->toBe('1.0.0')
         ->and($lastRequest->getHeaderLine('User-Agent'))->toBe('WatiHttp-PHP HTTP/1.1');
 });
 
@@ -129,4 +131,50 @@ it('accepts multiple options', function (): void {
     ]);
 
     expect($client->getEnvironment())->toBe($env);
+});
+
+it('normalizes request path by removing leading slash', function (): void {
+    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $client = new WatiClient($env);
+    /** @var Client $mockClient */
+    /** @var MockHandler $mockHandler */
+    [$mockClient, $mockHandler] = createMockClient();
+    $client->setClient($mockClient);
+
+    $request = new class('GET', '/api/v1/contacts') extends WatiRequest {};
+    $client->send($request);
+
+    $lastRequest = $mockHandler->getLastRequest();
+    assert($lastRequest !== null);
+    expect($lastRequest->getUri()->getPath())->toBe('api/v1/contacts');
+});
+
+it('preserves tenant id in url when base url contains path', function (): void {
+    $env = new WatiEnvironment('https://live-mt-server.wati.io/372813', 'test-token');
+    $client = new WatiClient($env);
+
+    // Create a client that captures the effective URL
+    $capturedUrl = null;
+    $response = json_encode(['status' => 'success']);
+    assert($response !== false);
+
+    $mockHandler = new MockHandler([
+        new Response(200, ['Content-Type' => 'application/json'], $response),
+    ]);
+
+    $handlerStack = HandlerStack::create($mockHandler);
+    $handlerStack->push(function (callable $handler) use (&$capturedUrl): Closure {
+        return function (RequestInterface $request, array $options) use ($handler, &$capturedUrl) {
+            $capturedUrl = (string) $request->getUri();
+
+            return $handler($request, $options);
+        };
+    });
+
+    $client->setClient(new Client(['handler' => $handlerStack, 'base_uri' => $env->baseUrl()]));
+
+    $request = new class('GET', '/api/v1/getContacts') extends WatiRequest {};
+    $client->send($request);
+
+    expect($capturedUrl)->toBe('https://live-mt-server.wati.io/372813/api/v1/getContacts');
 });

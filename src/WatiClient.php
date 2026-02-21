@@ -49,6 +49,8 @@ class WatiClient
      */
     public function send(RequestInterface $request): ResponseInterface
     {
+        $request = $this->normalizeRequestPath($request);
+
         if (! $this->hasAuthHeader($request)) {
             $request = $request->withHeader('Authorization', $this->environment->authorizationString());
         }
@@ -96,6 +98,19 @@ class WatiClient
         }
     }
 
+    protected function normalizeRequestPath(RequestInterface $request): RequestInterface
+    {
+        $uri = $request->getUri();
+        $path = $uri->getPath();
+
+        if (str_starts_with($path, '/')) {
+            $uri = $uri->withPath(substr($path, 1));
+            $request = $request->withUri($uri);
+        }
+
+        return $request;
+    }
+
     public function hasAuthHeader(RequestInterface $request): bool
     {
         return array_key_exists('Authorization', $request->getHeaders());
@@ -109,9 +124,8 @@ class WatiClient
     protected function injectSdkHeaders(RequestInterface $request): RequestInterface
     {
         return $request
-            ->withHeader('sdk_name', 'Wati PHP SDK')
-            ->withHeader('sdk_version', '1.0.0')
-            ->withHeader('sdk_tech_stack', 'PHP '.PHP_VERSION);
+            ->withHeader('SDK_Name', 'Wati PHP SDK')
+            ->withHeader('SDK_Version', '1.0.0');
     }
 
     public function setClient(Client $client): self

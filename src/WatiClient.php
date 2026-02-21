@@ -83,15 +83,9 @@ class WatiClient
                 $response,
                 $e
             );
-        } catch (ConnectException $e) {
+        } catch (ConnectException|GuzzleException  $e) {
             throw new WatiException(
                 'Failed to connect to Wati API: '.$e->getMessage(),
-                0,
-                $e
-            );
-        } catch (GuzzleException $e) {
-            throw new WatiException(
-                'HTTP request failed: '.$e->getMessage(),
                 0,
                 $e
             );

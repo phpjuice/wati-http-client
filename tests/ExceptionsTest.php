@@ -172,7 +172,7 @@ it('throws WatiException on generic guzzle error', function (): void {
     try {
         $client->send($request);
     } catch (WatiException $e) {
-        expect($e->getMessage())->toContain('HTTP request failed')
+        expect($e->getMessage())->toContain('Failed to connect to Wati API: Too many redirects')
             ->and($e->getPrevious())->toBeInstanceOf(GuzzleException::class);
     }
 });

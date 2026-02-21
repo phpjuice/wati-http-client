@@ -7,7 +7,7 @@ namespace Wati\Http\Exceptions;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
-class AuthenticationException extends WatiApiException
+final class AuthenticationException extends WatiApiException
 {
     public function __construct(
         string $message = 'Authentication failed. Check your bearer token.',

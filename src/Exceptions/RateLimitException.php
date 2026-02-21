@@ -7,9 +7,9 @@ namespace Wati\Http\Exceptions;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
-class RateLimitException extends WatiApiException
+final class RateLimitException extends WatiApiException
 {
-    protected ?int $retryAfter = null;
+    private ?int $retryAfter = null;
 
     public function __construct(
         string $message = 'Rate limit exceeded. Please retry after some time.',

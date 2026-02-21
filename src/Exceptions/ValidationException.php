@@ -7,7 +7,7 @@ namespace Wati\Http\Exceptions;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
-class ValidationException extends WatiApiException
+final class ValidationException extends WatiApiException
 {
     public function __construct(
         string $message = 'Validation failed. Check your request parameters.',

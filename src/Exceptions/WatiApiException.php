@@ -10,11 +10,11 @@ use Throwable;
 class WatiApiException extends WatiException
 {
     /** @var array<mixed>|null */
-    protected ?array $responseData = null;
+    private ?array $responseData = null;
 
     public function __construct(
         string $message,
-        protected int $statusCode,
+        private readonly int $statusCode,
         ?ResponseInterface $response = null,
         ?Throwable $previous = null
     ) {

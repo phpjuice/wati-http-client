@@ -21,7 +21,15 @@ class WatiClient
 {
     protected Client $client;
 
-    /** @var array<string, mixed> */
+    /**
+     * @var array{
+     *     timeout: int,
+     *     connect_timeout: int,
+     *     verify: bool,
+     *     debug: bool,
+     *     proxy: null|string
+     * }
+     */
     protected array $defaultOptions = [
         'timeout' => 30,
         'connect_timeout' => 10,
@@ -31,7 +39,7 @@ class WatiClient
     ];
 
     /**
-     * @param  array<string, mixed>  $options
+     * @param  array<string, int|bool|string|null>  $options
      */
     public function __construct(
         protected WatiEnvironment $environment,

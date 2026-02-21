@@ -6,9 +6,11 @@ namespace Wati\Http;
 
 class WatiEnvironment
 {
-    protected string $endpoint;
+    const int BEARER_PREFIX_LENGTH = 7; // strlen('bearer ')
 
-    protected string $bearerToken;
+    protected readonly string $endpoint;
+
+    protected readonly string $bearerToken;
 
     /**
      * Create a new Wati environment.
@@ -21,7 +23,7 @@ class WatiEnvironment
     {
         // Normalize bearer token: strip "Bearer " prefix if present
         if (str_starts_with(strtolower($bearerToken), 'bearer ')) {
-            $bearerToken = substr($bearerToken, strlen('bearer '));
+            $bearerToken = substr($bearerToken, self::BEARER_PREFIX_LENGTH);
         }
         $this->bearerToken = $bearerToken;
 

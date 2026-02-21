@@ -22,7 +22,7 @@ use Wati\Http\WatiEnvironment;
 use Wati\Http\WatiRequest;
 
 it('throws AuthenticationException on 401', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
 
     $mockHandler = new MockHandler([
@@ -35,7 +35,7 @@ it('throws AuthenticationException on 401', function (): void {
 })->throws(AuthenticationException::class);
 
 it('throws RateLimitException on 429', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
 
     $mockHandler = new MockHandler([
@@ -48,7 +48,7 @@ it('throws RateLimitException on 429', function (): void {
 })->throws(RateLimitException::class);
 
 it('throws ValidationException on 400', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
 
     $mockHandler = new MockHandler([
@@ -61,7 +61,7 @@ it('throws ValidationException on 400', function (): void {
 })->throws(ValidationException::class);
 
 it('throws ValidationException on 422', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
 
     $mockHandler = new MockHandler([
@@ -74,7 +74,7 @@ it('throws ValidationException on 422', function (): void {
 })->throws(ValidationException::class);
 
 it('throws WatiApiException on 404', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
 
     $mockHandler = new MockHandler([
@@ -87,7 +87,7 @@ it('throws WatiApiException on 404', function (): void {
 })->throws(WatiApiException::class);
 
 it('throws WatiApiException on 500', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
 
     $mockHandler = new MockHandler([
@@ -100,7 +100,7 @@ it('throws WatiApiException on 500', function (): void {
 })->throws(WatiApiException::class);
 
 it('includes response data in exception', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
 
     $mockHandler = new MockHandler([
@@ -119,7 +119,7 @@ it('includes response data in exception', function (): void {
 });
 
 it('includes retry-after in RateLimitException', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
 
     $mockHandler = new MockHandler([
@@ -137,7 +137,7 @@ it('includes retry-after in RateLimitException', function (): void {
 });
 
 it('throws WatiException on connection failure', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
 
     $connectException = new ConnectException(
@@ -159,7 +159,7 @@ it('throws WatiException on connection failure', function (): void {
 });
 
 it('throws WatiException on generic guzzle error', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
 
     $guzzleException = new class('Too many redirects') extends Exception implements GuzzleException {};

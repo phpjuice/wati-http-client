@@ -14,7 +14,7 @@ class WatiEnvironment
      * Create a new Wati environment.
      *
      * @param  string  $endpoint  API endpoint URL from Wati dashboard (includes tenant ID).
-     *                            Example: https://live-mt-server.wati.io/372813
+     *                            Example: https://your-instance.wati.io/123456
      * @param  string  $bearerToken  The bearer token for authentication.
      */
     public function __construct(string $endpoint, string $bearerToken)

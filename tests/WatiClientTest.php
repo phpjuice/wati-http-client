@@ -38,13 +38,13 @@ function createMockClient(): array
 }
 
 it('can create a client', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
     expect($client->getEnvironment())->toBe($env);
 });
 
 it('has authorization header', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
 
     $request = new class('GET', '/api/v1/contacts') extends WatiRequest {};
@@ -55,7 +55,7 @@ it('has authorization header', function (): void {
 });
 
 it('injects sdk headers', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
     /** @var Client $mockClient */
     /** @var MockHandler $mockHandler */
@@ -75,7 +75,7 @@ it('injects sdk headers', function (): void {
 });
 
 it('can execute a request', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
     /** @var Client $mockClient */
     [$mockClient] = createMockClient();
@@ -88,42 +88,42 @@ it('can execute a request', function (): void {
 });
 
 it('accepts custom timeout option', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env, ['timeout' => 60]);
 
     expect($client->getEnvironment())->toBe($env);
 });
 
 it('accepts custom connect_timeout option', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env, ['connect_timeout' => 20]);
 
     expect($client->getEnvironment())->toBe($env);
 });
 
 it('accepts verify ssl option', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env, ['verify' => false]);
 
     expect($client->getEnvironment())->toBe($env);
 });
 
 it('accepts proxy option', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env, ['proxy' => 'tcp://localhost:8080']);
 
     expect($client->getEnvironment())->toBe($env);
 });
 
 it('accepts debug option', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env, ['debug' => true]);
 
     expect($client->getEnvironment())->toBe($env);
 });
 
 it('accepts multiple options', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env, [
         'timeout' => 60,
         'connect_timeout' => 20,
@@ -135,7 +135,7 @@ it('accepts multiple options', function (): void {
 });
 
 it('normalizes request path by removing leading slash', function (): void {
-    $env = new WatiEnvironment('https://example.wati.io', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
     /** @var Client $mockClient */
     /** @var MockHandler $mockHandler */
@@ -151,7 +151,7 @@ it('normalizes request path by removing leading slash', function (): void {
 });
 
 it('preserves tenant id in url when base url contains path', function (): void {
-    $env = new WatiEnvironment('https://live-mt-server.wati.io/372813', 'test-token');
+    $env = new WatiEnvironment('https://your-instance.wati.io/123456', 'test-token');
     $client = new WatiClient($env);
 
     // Create a client that captures the effective URL
@@ -177,5 +177,5 @@ it('preserves tenant id in url when base url contains path', function (): void {
     $request = new class('GET', '/api/v1/getContacts') extends WatiRequest {};
     $client->send($request);
 
-    expect($capturedUrl)->toBe('https://live-mt-server.wati.io/372813/api/v1/getContacts');
+    expect($capturedUrl)->toBe('https://your-instance.wati.io/123456/api/v1/getContacts');
 });

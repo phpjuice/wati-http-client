@@ -34,7 +34,7 @@ use Wati\Http\WatiClient;
 use Wati\Http\WatiEnvironment;
 
 // Get this URL from your Wati Dashboard (API Docs section)
-// It includes your tenant ID: https://live-mt-server.wati.io/{tenantId}
+// It includes your tenant ID: https://your-instance.wati.io/{tenantId}
 $endpoint = "https://live-mt-server.wati.io/372813";
 $bearerToken = "your-bearer-token";
 

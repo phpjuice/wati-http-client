@@ -43,17 +43,6 @@ it('can create a client', function (): void {
     expect($client->getEnvironment())->toBe($env);
 });
 
-it('has authorization header', function (): void {
-    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
-    $client = new WatiClient($env);
-
-    $request = new class('GET', '/api/v1/contacts') extends WatiRequest {};
-    expect($client->hasAuthHeader($request))->toBeFalse();
-
-    $request = $request->withHeader('Authorization', 'Bearer test');
-    expect($client->hasAuthHeader($request))->toBeTrue();
-});
-
 it('injects sdk headers', function (): void {
     $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
     $client = new WatiClient($env);
@@ -72,6 +61,23 @@ it('injects sdk headers', function (): void {
         ->and($lastRequest->getHeaderLine('Wati-SDK-Version'))->toBe('1.0.0')
         ->and($lastRequest->getHeaderLine('Wati-SDK-Language'))->toBe('PHP')
         ->and($lastRequest->getHeaderLine('User-Agent'))->toBe('WatiHttp-PHP HTTP/1.1');
+});
+
+it('does not overwrite custom authorization header', function (): void {
+    $env = new WatiEnvironment('https://your-instance.wati.io', 'test-token');
+    $client = new WatiClient($env);
+    /** @var Client $mockClient */
+    /** @var MockHandler $mockHandler */
+    [$mockClient, $mockHandler] = createMockClient();
+    $client->setClient($mockClient);
+
+    $request = new class('GET', '/api/v1/contacts') extends WatiRequest {};
+    $request = $request->withHeader('Authorization', 'Custom-Token');
+    $client->send($request);
+
+    $lastRequest = $mockHandler->getLastRequest();
+    assert($lastRequest !== null);
+    expect($lastRequest->getHeaderLine('Authorization'))->toBe('Custom-Token');
 });
 
 it('can execute a request', function (): void {

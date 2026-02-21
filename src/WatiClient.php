@@ -83,7 +83,7 @@ class WatiClient
                 $response,
                 $e
             );
-        } catch (ConnectException|GuzzleException  $e) {
+        } catch (ConnectException|GuzzleException $e) {
             throw new WatiException(
                 'Failed to connect to Wati API: '.$e->getMessage(),
                 0,
@@ -105,7 +105,7 @@ class WatiClient
         return $request;
     }
 
-    public function hasAuthHeader(RequestInterface $request): bool
+    protected function hasAuthHeader(RequestInterface $request): bool
     {
         return array_key_exists('Authorization', $request->getHeaders());
     }

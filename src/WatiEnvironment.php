@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Wati\Http;
 
-class WatiEnvironment
+final readonly class WatiEnvironment
 {
-    const int BEARER_PREFIX_LENGTH = 7; // strlen('bearer ')
+    public const int BEARER_PREFIX_LENGTH = 7; // strlen('bearer ')
 
-    protected readonly string $endpoint;
+    private string $endpoint;
 
-    protected readonly string $bearerToken;
+    private string $bearerToken;
 
     /**
      * Create a new Wati environment.

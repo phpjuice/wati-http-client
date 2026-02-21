@@ -17,9 +17,9 @@ use Wati\Http\Exceptions\ValidationException;
 use Wati\Http\Exceptions\WatiApiException;
 use Wati\Http\Exceptions\WatiException;
 
-class WatiClient
+final class WatiClient
 {
-    protected Client $client;
+    private Client $client;
 
     /**
      * @var array{
@@ -30,7 +30,7 @@ class WatiClient
      *     proxy: null|string
      * }
      */
-    protected array $defaultOptions = [
+    private array $defaultOptions = [
         'timeout' => 30,
         'connect_timeout' => 10,
         'verify' => true,
@@ -42,7 +42,7 @@ class WatiClient
      * @param  array<string, int|bool|string|null>  $options
      */
     public function __construct(
-        protected WatiEnvironment $environment,
+        private readonly WatiEnvironment $environment,
         array $options = []
     ) {
         $config = array_merge($this->defaultOptions, $options);
@@ -52,8 +52,11 @@ class WatiClient
     }
 
     /**
-     * @throws WatiException
+     * @throws AuthenticationException
+     * @throws RateLimitException
+     * @throws ValidationException
      * @throws WatiApiException
+     * @throws WatiException
      */
     public function send(RequestInterface $request): ResponseInterface
     {
@@ -100,7 +103,7 @@ class WatiClient
         }
     }
 
-    protected function normalizeRequestPath(RequestInterface $request): RequestInterface
+    private function normalizeRequestPath(RequestInterface $request): RequestInterface
     {
         $uri = $request->getUri();
         $path = $uri->getPath();
@@ -113,17 +116,17 @@ class WatiClient
         return $request;
     }
 
-    protected function hasAuthHeader(RequestInterface $request): bool
+    private function hasAuthHeader(RequestInterface $request): bool
     {
         return array_key_exists('Authorization', $request->getHeaders());
     }
 
-    protected function injectUserAgentHeaders(RequestInterface $request): RequestInterface
+    private function injectUserAgentHeaders(RequestInterface $request): RequestInterface
     {
         return $request->withHeader('User-Agent', 'WatiHttp-PHP HTTP/1.1');
     }
 
-    protected function injectSdkHeaders(RequestInterface $request): RequestInterface
+    private function injectSdkHeaders(RequestInterface $request): RequestInterface
     {
         return $request
             ->withHeader('Wati-SDK-Name', 'wati-http-client')

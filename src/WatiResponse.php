@@ -19,14 +19,20 @@ final class WatiResponse extends Response implements ResponseInterface
             $response->getReasonPhrase()
         );
     }
-    
-    public function json(): array
+
+    public function json(): mixed
     {
         return json_decode($this->getBody()->getContents(), true);
     }
 
     public function isSuccessful(): bool
     {
-        return ($this->json()['result'] ?? null) === 'success';
+        $json = $this->json();
+
+        if (! is_array($json)) {
+            return false;
+        }
+
+        return ($json['result'] ?? null) === 'success';
     }
 }

@@ -10,7 +10,6 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use Wati\Http\Exceptions\AuthenticationException;
 use Wati\Http\Exceptions\RateLimitException;
 use Wati\Http\Exceptions\ValidationException;
@@ -58,7 +57,7 @@ final class WatiClient
      * @throws WatiApiException
      * @throws WatiException
      */
-    public function send(RequestInterface $request): ResponseInterface
+    public function send(RequestInterface $request): WatiResponse
     {
         $request = $this->normalizeRequestPath($request);
 
@@ -70,7 +69,7 @@ final class WatiClient
         $request = $this->injectSdkHeaders($request);
 
         try {
-            return $this->client->send($request);
+            return WatiResponse::fromResponse($this->client->send($request));
         } catch (ClientException $e) {
             $response = $e->getResponse();
             $statusCode = $response->getStatusCode();

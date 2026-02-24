@@ -2,6 +2,10 @@
 
 All notable changes to `phpjuice/wati-http-client` will be documented in this file.
 
+## 1.0.4
+
+- Add tests for `WatiResponse`
+
 ## 1.0.3
 
 - Add `WatiResponse` - Base response class

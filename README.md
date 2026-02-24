@@ -9,6 +9,10 @@
 A PHP HTTP Client for the [Wati.io](https://wati.io) WhatsApp API. Provides a simple, fluent API to interact with Wati's
 REST API.
 
+## Related Packages
+
+For a higher-level, feature-rich integration, consider using [wati-sdk](https://github.com/phpjuice/wati-sdk). It provides ready-to-use request classes, response DTOs, and additional convenience features built on top of this HTTP client.
+
 ## Installation
 
 This package requires PHP 8.3 or higher.

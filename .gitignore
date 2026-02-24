@@ -10,4 +10,4 @@ vendor
 .php-cs-fixer.cache
 .phpunit.cache
 composer.lock
-test-request.php
+playground.php

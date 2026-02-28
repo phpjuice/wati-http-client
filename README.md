@@ -4,7 +4,8 @@
 [![PHP Version](https://img.shields.io/badge/PHP-8.3%20%7C%208.4-777BB4?logo=php&logoColor=white)](https://php.net)
 [![Latest Stable Version](http://poser.pugx.org/phpjuice/wati-http-client/v)](https://packagist.org/packages/phpjuice/wati-http-client)
 [![Total Downloads](http://poser.pugx.org/phpjuice/wati-http-client/downloads)](https://packagist.org/packages/phpjuice/wati-http-client)
-[![License](http://poser.pugx.org/phpjuice/wati-http-client/license)](https://packagist.org/packages/phpjuice/wati-http-client)
+[![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./.github/CONTRIBUTING.md)
 
 A PHP HTTP Client for the [Wati.io](https://wati.io) WhatsApp API. Provides a simple, fluent API to interact with Wati's
 REST API.
